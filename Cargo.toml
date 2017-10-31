@@ -1,7 +1,7 @@
 [package]
 name = "tomorrow-http"
 version = "0.1.0"
-authors = ["Valentin Fries <contact@fries.io>, Vincent Milano <vincent_mot@hotmail.fr>"]
+authors = ["Valentin Fries <contact@fries.io>", "Vincent Milano <vincent_mot@hotmail.fr>"]
 
 [dependencies]
 tomorrow-core = {git = "https://github.com/tomorrow-paper/tomorrow-core"}

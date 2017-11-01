@@ -39,7 +39,9 @@ mod tests {
 
         let build: Result<Build> = client.request::<Build>("build");
 
-        assert!(build.is_ok());
-        assert!(build.unwrap().build_id > 0);
+        match build {
+            Ok(build) => assert!(build.build_id > 0),
+            Err(_) => assert!(build.is_err())
+        }
     }
 }

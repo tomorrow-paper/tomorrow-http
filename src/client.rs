@@ -1,7 +1,15 @@
-use hyper::Client as HttpClient;
-use hyper::header::Headers;
-
+use tomorrow_core::{Error, Result};
 use super::Requester;
+
+use std::io::Read;
+
+use serde_json;
+use serde::de::DeserializeOwned;
+
+use hyper::Client as HttpClient;
+
+use hyper::status::StatusCode;
+use hyper::header::Headers;
 
 pub struct Client {
     client: HttpClient,
@@ -21,15 +29,26 @@ impl Client {
 }
 
 impl Requester for Client {
-    fn get_client(&self) -> &HttpClient {
-        &self.client
-    }
-    
-    fn get_headers(&self) -> Headers {
-        self.headers.clone()
-    }
 
-    fn get_api_url(&self) -> String {
-        self.api_url.clone()
+    fn request<T>(&self, endpoint: &str) -> Result<T> where T: DeserializeOwned {
+        
+        let url = format!("{}/{}", self.api_url, endpoint);
+        let mut response = self.client
+            .get(&url)
+            .headers(self.headers.clone())
+            .send()?;
+    
+        let mut body = String::new();
+        response.read_to_string(&mut body)?;
+    
+        match response.status {
+            StatusCode::Conflict |
+            StatusCode::BadRequest |
+            StatusCode::UnprocessableEntity |
+            StatusCode::Unauthorized |
+            StatusCode::NotFound |
+            StatusCode::Forbidden => Err(Error::from(body)),
+            _ => Ok(serde_json::from_str::<T>(&body)?)
+        }
     }
 }

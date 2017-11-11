@@ -27,8 +27,8 @@ impl Requester for MockClient {
 #[cfg(test)]
 mod tests {
 
-    use ::Requester;
-    use ::mock::MockClient;
+    use ::json::Requester;
+    use ::json::mock::MockClient;
 
     #[derive(Deserialize)]
     pub struct Build {

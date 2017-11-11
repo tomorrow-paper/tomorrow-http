@@ -10,13 +10,8 @@ extern crate serde_json;
 pub const PACKAGE: &'static str = env!("CARGO_PKG_NAME");
 pub const VERSION: &'static str = env!("CARGO_PKG_VERSION");
 
+pub mod json;
+pub mod raw;
+
 mod builder;
 pub use self::builder::Builder;
-
-mod client;
-pub use self::client::Client;
-
-mod requester;
-pub use self::requester::Requester;
-
-pub mod mock;

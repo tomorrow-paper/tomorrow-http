@@ -11,8 +11,6 @@ use hyper::header::{
 };
 use hyper::LanguageTag;
 
-use super::Client;
-
 pub struct Builder {
     client: HttpClient,
     headers: Headers,
@@ -77,11 +75,15 @@ impl Builder {
     }
 }
 
-impl Into<Client> for Builder {
-    
-    /// Consumes this `Builder` instance in order to create a fully-configured API `Client`.
-    fn into(self) -> Client {
-        Client::new(self.client, self.headers, self.api_url)
+impl Into<::json::Client> for Builder {
+    fn into(self) -> ::json::Client {
+        ::json::Client::new(self.client, self.headers, self.api_url)
+    }
+}
+
+impl Into<::raw::Client> for Builder {
+    fn into(self) -> ::raw::Client {
+        ::raw::Client::new(self.client, self.headers, self.api_url)
     }
 }
 
